@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="ApiFinalProject/ApiFinalProject.csproj" />
+  <Project Path="BLL/BLL.csproj" Id="ec519e9b-bf78-45e6-b397-da01cd513c7d" />
+  <Project Path="Common/Common.csproj" Id="36e97865-d920-4236-8412-c0e5c591f6f1" />
+  <Project Path="DAL/DAL.csproj" Id="7d6a43f8-f0c1-4cbd-8968-0c572da2fe0f" />
+</Solution>

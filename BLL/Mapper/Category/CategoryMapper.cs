@@ -1,0 +1,22 @@
+﻿using Common;
+using FluentValidation.Results;
+
+namespace BLL
+{
+    public class CategoryMapper:ICategoryMapper
+    {
+        public Dictionary<string, List<Errors>> MapError(ValidationResult validationResult)
+        {
+            return validationResult.Errors
+                    .GroupBy(r => r.PropertyName)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.Select(e => new Errors
+                        {
+                            Code = e.ErrorCode,
+                            Message = e.ErrorMessage,
+                        }).ToList()
+                    );
+        }
+    }
+}
