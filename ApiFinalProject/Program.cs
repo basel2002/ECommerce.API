@@ -14,7 +14,7 @@ public class Program
         var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         var builder = WebApplication.CreateBuilder(args);
 
-        // ✅ 1. CORS
+        // CORS
         builder.Services.AddCors(options =>
         {
             options.AddPolicy(name: MyAllowSpecificOrigins,
@@ -25,26 +25,26 @@ public class Program
                 });
         });
 
-        // ✅ 2. Controllers — only ONCE, merged together
+        //  Controllers 
         builder.Services.AddControllers()
             .AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
             });
 
-        // ✅ 3. Identity — before DAL (DbContext is inside it)
+        // Identity 
         builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
 
-        // ✅ 4. DAL & BLL
+        // DAL & BLL
         builder.Services.AddDALServices(builder.Configuration);
         builder.Services.AddBLLServices();
 
-        // ✅ 5. JWT Settings
+        // JWT Settings
         builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
-        // ✅ 6. Authentication
+        //  Authentication
         builder.Services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -65,7 +65,7 @@ public class Program
             };
         });
 
-        // ✅ 7. Authorization — fixed closing bracket was }; should be });
+        //  Authorization 
         builder.Services.AddAuthorization(options =>
         {
             options.AddPolicy("AdminOnly", policy =>
@@ -75,30 +75,27 @@ public class Program
 
         });
 
-        // ✅ 8. OpenAPI
+        //  OpenAPI
         builder.Services.AddOpenApi();
-        // Add Swagger
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+
 
 
         var app = builder.Build();
 
-        // ✅ Middleware pipeline — ORDER MATTERS
+        //  Middleware pipeline — 
         if (app.Environment.IsDevelopment())
         {
-            //app.MapOpenApi();
-            //app.MapScalarApiReference();
-            app.UseSwagger();
-            app.UseSwaggerUI();
+            app.MapOpenApi();
+            app.MapScalarApiReference();
+
 
         }
 
-        app.UseHttpsRedirection();  // 1st
-        app.UseCors(MyAllowSpecificOrigins);  // 2nd ← moved BEFORE auth
-        app.UseAuthentication();    // 3rd
-        app.UseAuthorization();     // 4th
-        app.MapControllers();       // 5th
+        app.UseHttpsRedirection();  
+        app.UseCors(MyAllowSpecificOrigins);  
+        app.UseAuthentication();    
+        app.UseAuthorization();     
+        app.MapControllers();       
         app.Run();
     }
 }
