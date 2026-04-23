@@ -192,7 +192,7 @@ ECommerceAPI/
 
 ```bash
 # Clone the repository
-git clone https://github.com/YoussefKassab1/E-Commerce-API-Project.git
+git clone https://github.com/basel2002/ECommerce.API.git
 
 # Navigate to project folder
 cd ecommerce-api
